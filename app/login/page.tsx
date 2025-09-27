@@ -29,6 +29,7 @@ export default function LoginPage() {
       toast.success('Login successful!');
       router.push('/admin/dashboard');
     } catch (error: any) {
+      
       toast.error(error.message || 'Login failed');
     } finally {
       setLoading(false);

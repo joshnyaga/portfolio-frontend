@@ -53,14 +53,41 @@ export interface User {
   createdAt: string;
 }
 
-export interface AuthResponse {
-  success: boolean;
-  token: string;
-  user: User;
+
+
+
+export interface User {
+  _id: string;
+  email: string;
+  name: string;
+  role: "admin" | "user";
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface ApiResponse<T> {
+export interface AuthResponse {
   success: boolean;
-  data?: T;
-  message?: string;
+  user: User;
+  token: string;
+  errors?: string[];
 }
+
+// Generic API Response wrapper
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data: T | null;
+  errors: string[];
+}
+
+// Type for user validation response
+export interface UserValidationResponse {
+  success: boolean;
+  user: User;
+  errors?: string[];
+}
+
+// Union types instead of extending interfaces
+export type AuthApiResponse = AuthResponse | ApiResponse<AuthResponse>;
+export type UserValidationApiResponse =
+  | UserValidationResponse
+  | ApiResponse<UserValidationResponse>;
