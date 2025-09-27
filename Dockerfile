@@ -13,7 +13,7 @@ RUN npm install
 # Copy the rest of the code
 COPY . .
 
-# Build the Next.js app
+# Build the Next.js app 
 RUN npm run build
 
 # Expose the port Next.js runs on
