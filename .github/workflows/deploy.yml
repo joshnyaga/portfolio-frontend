@@ -27,7 +27,7 @@ jobs:
       - name: Build and run Docker container on server
         run: |
           ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << EOF
-            cd ${{ secrets.DEPLOY_PATH }}
+            cd ${{ secrets.DEPLOY_PATH }}/portfolio/frontend
             docker build -t portfolio-frontend .
             docker stop portfolio-frontend || true
             docker rm portfolio-frontend || true
