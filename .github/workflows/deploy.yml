@@ -28,8 +28,13 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << EOF
             cd ${{ secrets.DEPLOY_PATH }}
-            docker build -t portfolio-backend .
-            docker stop portfolio-backend || true
-            docker rm portfolio-backend || true
-            docker run -d --name portfolio-backend -p 3001:3001 portfolio-backend
+            docker build -t portfolio-frontend .
+            docker stop portfolio-frontend || true
+            docker rm portfolio-frontend || true
+            docker run -d \
+              --name portfolio-frontend \
+              -p 3001:3001 \
+              -e NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+              -e NEXT_PUBLIC_IMAGE_URL="${{ secrets.NEXT_PUBLIC_IMAGE_URL }}" \
+              portfolio-frontend
           EOF
