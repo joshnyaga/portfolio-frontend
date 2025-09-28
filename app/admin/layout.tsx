@@ -8,9 +8,11 @@ import {
   LayoutDashboard,
   FolderOpen,
   Wrench,
+  CalendarCheck,
   Briefcase,
   Mail,
   LogOut,
+  BookCheck,
   Menu,
   X,
 } from "lucide-react";
@@ -24,6 +26,8 @@ const navigation = [
   { name: "Skills", href: "/admin/skills", icon: Wrench },
   { name: "Experience", href: "/admin/experience", icon: Briefcase },
   { name: "Messages", href: "/admin/contact", icon: Mail },
+  { name: "Tasks", href: "/admin/tasks", icon: BookCheck },
+  { name: "Schedule", href: "/admin/schedule", icon: CalendarCheck },
 ];
 
 export default function AdminLayout({
@@ -57,7 +61,7 @@ export default function AdminLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -68,7 +72,8 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    // 🔧 FIXED: Changed from min-h-screen to h-screen and added overflow-hidden
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -87,7 +92,7 @@ export default function AdminLayout({
       `}
       >
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white flex-shrink-0">
           <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -127,7 +132,7 @@ export default function AdminLayout({
         </nav>
 
         {/* Logout Section */}
-        <div className="p-4 border-t border-gray-200 bg-white">
+        <div className="p-4 border-t border-gray-200 bg-white flex-shrink-0">
           <button
             onClick={handleLogout}
             className="group flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-colors"
@@ -138,10 +143,10 @@ export default function AdminLayout({
         </div>
       </div>
 
-      {/* Main content area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top navigation bar */}
-        <div className="bg-white shadow-sm border-b border-gray-200 lg:hidden">
+      {/* 🔧 FIXED: Added flex flex-col and h-full to constrain height */}
+      <div className="flex-1 flex flex-col min-w-0 h-full">
+        {/* Top navigation bar - Mobile */}
+        <div className="bg-white shadow-sm border-b border-gray-200 lg:hidden flex-shrink-0">
           <div className="flex items-center justify-between h-16 px-4">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -160,7 +165,7 @@ export default function AdminLayout({
         </div>
 
         {/* Desktop header - hidden on mobile */}
-        <div className="hidden lg:block bg-white shadow-sm border-b border-gray-200">
+        <div className="hidden lg:block bg-white shadow-sm border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center justify-between h-16 px-8">
             <div className="flex items-center text-sm">
               <span className="text-gray-500">Welcome back, </span>
@@ -171,9 +176,9 @@ export default function AdminLayout({
           </div>
         </div>
 
-        {/* Page content */}
-        <main className="flex-1 p-6 lg:p-8 overflow-auto">
-          <div className="max-w-7xl mx-auto">{children}</div>
+        {/* 🔧 FIXED: Added specific height and better overflow handling */}
+        <main className="flex-1 p-6 lg:p-8 overflow-y-auto overflow-x-hidden bg-gray-50 min-h-0">
+          <div className="max-w-7xl mx-auto h-full">{children}</div>
         </main>
       </div>
     </div>

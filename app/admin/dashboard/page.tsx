@@ -178,21 +178,38 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Enhanced Stats Grid - Now includes visitor analytics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-6">
-        {statCards.map((stat, index) => (
-          <div
-            key={stat.name}
-            className={`bg-white rounded-lg shadow p-6 ${
-              index >= 5 ? "xl:col-span-1" : "xl:col-span-1"
-            }`}
-          >
+      {/* Enhanced Stats Grid - 2 rows for better readability */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* First Row - Portfolio Content Stats */}
+        {statCards.slice(0, 5).map((stat, index) => (
+          <div key={stat.name} className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <div className={`p-3 rounded-lg ${stat.color}`}>
+              <div className={`p-3 rounded-lg ${stat.color} flex-shrink-0`}>
                 <stat.icon className="h-6 w-6 text-white" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">{stat.name}</p>
+              <div className="ml-4 min-w-0 flex-1">
+                <p className="text-sm font-medium text-gray-600 truncate">
+                  {stat.name}
+                </p>
+                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Second Row - Visitor Analytics Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {statCards.slice(5).map((stat, index) => (
+          <div key={stat.name} className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className={`p-3 rounded-lg ${stat.color} flex-shrink-0`}>
+                <stat.icon className="h-6 w-6 text-white" />
+              </div>
+              <div className="ml-4 min-w-0 flex-1">
+                <p className="text-sm font-medium text-gray-600 truncate">
+                  {stat.name}
+                </p>
                 <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
               </div>
             </div>
@@ -401,7 +418,7 @@ export default function DashboardPage() {
             </h2>
           </div>
           <div className="p-6">
-            {!visitorLoading && recentVisitors.length > 0 ? (
+            {!visitorLoading && recentVisitors && recentVisitors.length > 0 ? (
               <div className="space-y-4">
                 {recentVisitors.map((visitor) => (
                   <div
