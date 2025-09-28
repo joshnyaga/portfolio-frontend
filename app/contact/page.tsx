@@ -172,7 +172,7 @@ export default function ContactPage() {
                           href="mailto:your.email@example.com"
                           className="text-gray-400 hover:text-blue-400 transition-colors"
                         >
-                          your.email@example.com
+                         joshuakithinjinyaga@gmail.com
                         </a>
                       </div>
                     </div>
@@ -207,7 +207,7 @@ export default function ContactPage() {
 
                   <div className="grid gap-4">
                     <a
-                      href="https://github.com/your-username"
+                      href="https://github.com/joshnyaga"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 border border-gray-600 hover:border-blue-500/50 group"
@@ -224,7 +224,7 @@ export default function ContactPage() {
                     </a>
 
                     <a
-                      href="https://linkedin.com/in/your-profile"
+                      href="https://www.linkedin.com/in/joshua-kithinji-b75a96221"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 border border-gray-600 hover:border-blue-500/50 group"

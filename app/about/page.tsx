@@ -45,8 +45,8 @@ export default function AboutPage() {
     },
     {
       icon: Music,
-      title: "Music Production",
-      desc: "Creating beats in my spare time",
+      title: "Instrumental",
+      desc: "Listening to music and playing guitar",
     },
     {
       icon: Gamepad2,
@@ -107,7 +107,7 @@ export default function AboutPage() {
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Hello, I'm John
+              Hello, I'm Joshua Kithinji Nyaga
             </h1>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
               A passionate full-stack developer who loves crafting beautiful,
