@@ -224,20 +224,23 @@ export default function DashboardPage() {
                   Popular Pages
                 </h3>
                 <div className="space-y-2">
-                  {visitorStats.popularPages.slice(0, 3).map((page, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center"
-                    >
-                      <span className="text-sm text-gray-600 truncate font-mono">
-                        {page._id || "Unknown"}
-                      </span>
-                      <span className="text-sm font-medium text-gray-900">
-                        {page.count}
-                      </span>
-                    </div>
-                  ))}
-                  {visitorStats.popularPages.length === 0 && (
+                  {(visitorStats?.popularPages || [])
+                    .slice(0, 3)
+                    .map((page, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-between items-center"
+                      >
+                        <span className="text-sm text-gray-600 truncate font-mono">
+                          {page._id || "Unknown"}
+                        </span>
+                        <span className="text-sm font-medium text-gray-900">
+                          {page.count}
+                        </span>
+                      </div>
+                    ))}
+                  {(!visitorStats?.popularPages ||
+                    visitorStats.popularPages.length === 0) && (
                     <p className="text-sm text-gray-500">No page data yet</p>
                   )}
                 </div>
@@ -249,7 +252,7 @@ export default function DashboardPage() {
                   Top Countries
                 </h3>
                 <div className="space-y-2">
-                  {visitorStats.topCountries
+                  {(visitorStats?.topCountries || [])
                     .slice(0, 3)
                     .map((country, index) => (
                       <div
@@ -265,7 +268,8 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     ))}
-                  {visitorStats.topCountries.length === 0 && (
+                  {(!visitorStats?.topCountries ||
+                    visitorStats.topCountries.length === 0) && (
                     <p className="text-sm text-gray-500">
                       No location data yet
                     </p>
@@ -279,7 +283,7 @@ export default function DashboardPage() {
                   Popular Browsers
                 </h3>
                 <div className="space-y-2">
-                  {visitorStats.browserStats
+                  {(visitorStats?.browserStats || [])
                     .slice(0, 3)
                     .map((browser, index) => (
                       <div
@@ -294,7 +298,8 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     ))}
-                  {visitorStats.browserStats.length === 0 && (
+                  {(!visitorStats?.browserStats ||
+                    visitorStats.browserStats.length === 0) && (
                     <p className="text-sm text-gray-500">No browser data yet</p>
                   )}
                 </div>
