@@ -1,8 +1,8 @@
-name: Deploy Portfolio
+name: Deploy Portfolio Frontend
 
 on:
   push:
-    branches: [main] # or "master" or your deploy branch
+    branches: [main]
 
 jobs:
   deploy:
@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up SSH key
         run: |
@@ -19,28 +19,21 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy project files to server
+      - name: Build Docker image
         run: |
-          rsync -avz --exclude=node_modules --exclude=.next ./ \
-            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/portfolio/frontend
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
+            --build-arg NEXT_PUBLIC_IMAGE_URL=${{ secrets.NEXT_PUBLIC_IMAGE_URL }} \
+            -t portfolio-frontend:latest .
+          docker save portfolio-frontend:latest | gzip > portfolio-frontend.tar.gz
 
-      - name: Build and run Docker container on server
+      - name: Copy image to server
         run: |
-          export NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
-          export NEXT_PUBLIC_IMAGE_URL=${{ secrets.NEXT_PUBLIC_IMAGE_URL }}
+          scp -i ~/.ssh/id_rsa \
+            portfolio-frontend.tar.gz \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/portfolio/
 
-          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << EOF
-            cd ${{ secrets.DEPLOY_PATH }}/portfolio/frontend
-            docker build \
-              --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-              --build-arg NEXT_PUBLIC_IMAGE_URL=$NEXT_PUBLIC_IMAGE_URL \
-              -t portfolio-frontend .
-
-            docker stop portfolio-frontend || true
-            docker rm portfolio-frontend || true
-
-            docker run -d \
-              --name portfolio-frontend \
-              -p 3001:3001 \
-              portfolio-frontend
-          EOF
+      - name: Deploy on server
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
+            "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && /var/www/portfolio/deploy-frontend.sh"

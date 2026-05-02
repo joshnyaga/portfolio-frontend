@@ -1,21 +1,30 @@
-
-# Use official Node.js image as base
-FROM node:18-alpine
-
-# Set working directory
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Install dependencies
-COPY package.json package-lock.json* ./
-RUN npm install
+# Accept build args for public env vars
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_IMAGE_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_IMAGE_URL=$NEXT_PUBLIC_IMAGE_URL
 
-# Copy the rest of the code
+COPY package*.json ./
+RUN npm ci
 COPY . .
-
-# Build the Next.js app 
 RUN npm run build
 
-# Expose the port Next.js runs on
+FROM node:18-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3001
+ENV HOSTNAME=0.0.0.0
+
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 EXPOSE 3001
-# Start the app
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
