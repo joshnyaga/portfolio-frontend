@@ -36,4 +36,16 @@ jobs:
       - name: Deploy on server
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
-            "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && /var/www/portfolio/deploy-frontend.sh"
+            "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
+            set -e && \
+            cd ${{ secrets.DEPLOY_PATH }}/portfolio && \
+            echo 'Loading image...' && \
+            docker load < portfolio-frontend.tar.gz && \
+            echo 'Starting services...' && \
+            docker compose down portfolio-frontend && \
+            docker compose up -d portfolio-frontend && \
+            echo 'Cleaning up...' && \
+            docker image prune -f && \
+            rm -f portfolio-frontend.tar.gz && \
+            echo '✅ Frontend deployment complete' && \
+            docker ps"      
